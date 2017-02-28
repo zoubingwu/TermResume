@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    color: #bfbfbf;
+    font-family: monospace, Monaco;
+    font-size: 18px;
+    vertical-align: middle;
+}
+span.command {
+    white-space: pre;
+}
+a.link {
+    color: #5555ff;
+    text-decoration: none;
+}
+a.href {
+    color: #55ff55;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+.blink {
+    background-color: #a8a7a8;
+}
