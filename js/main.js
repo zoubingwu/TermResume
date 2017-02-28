@@ -220,7 +220,7 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
             "JavaScript设计模式与开发实践",
             "算法导论",
             "Http权威指南",
-            "基于MVC的JavaScript Web福应用开发"
+            "基于MVC的JavaScript Web富应用开发"
         ],
         "finished": [
             "JavaScript高级程序设计",
