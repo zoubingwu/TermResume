@@ -96,7 +96,7 @@
                     that.specialKeysHandler(13);
                     if (callback) callback();
                 };
-            }, 100)
+            }, 250)
         },
         input: function(key) {
             var stdout = document.getElementById('stdout');
