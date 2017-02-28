@@ -39,19 +39,16 @@
     }
 
     var ttys = {
-        init: function() {
-            this.history = [];
-            this.historyIndex = -1;
-            this.showTime();
-            this.cursorBlinker();
-            this.begin();
-        },
         showTime: function() {
             var time = document.getElementById('time');
             var t = new Date();
             time.innerHTML = `Last Login: ${t} on ttys000`;
         },
-
+        cursorBlinker: function() {
+            var cursor = document.getElementById('cursor');
+            cursor.className = cursor.className ? '' : 'blink';
+            setTimeout(this.cursorBlinker.bind(this), 500);
+        },
         begin: function() {
             window.onkeydown = function(e) {
                 var key = (e.which) ? e.which : e.keyCode;
@@ -69,30 +66,43 @@
                 this.input((e.which) ? e.which : e.keyCode)
             }.bind(this);
 
-
         },
-
+        init: function() {
+            this.history = [];
+            this.historyIndex = -1;
+            this.showTime();
+            this.cursorBlinker();
+            this.begin();
+            this.intro('open README', function() {
+                this.intro('help', function() {
+                    this.intro('cd projects', function() {
+                        this.intro('ls', function(){
+                            this.intro('cd ~')
+                        }.bind(this));
+                    }.bind(this))
+                }.bind(this))
+            }.bind(this))
+        },
+        intro: function(command, callback) {
+            var that = this;
+            var i = 0;
+            var autoType = setInterval(function() {
+                document.getElementById('stdout').innerHTML += command[i];
+                i++;
+                if (i == command.length) {
+                    clearInterval(autoType);
+                    that.specialKeysHandler(13);
+                    if (callback) callback();
+                };
+            }, 200)
+        },
         input: function(key) {
             var stdout = document.getElementById('stdout');
-
             if (!stdout || key < 0x20 || key > 0x7E || key === 13 || key === 9) {
                 return;
             }
-
             stdout.innerHTML += String.fromCharCode(key);
-
         },
-
-        output: function() {
-
-        },
-
-        cursorBlinker: function() {
-            var cursor = document.getElementById('cursor');
-            cursor.className = cursor.className ? '' : 'blink';
-            setTimeout(this.cursorBlinker.bind(this), 500);
-        },
-
         specialKeysHandler: function(key, e) {
 
             var stdout = document.getElementById('stdout');
@@ -122,7 +132,8 @@
 
         returnHandler: function() {
             var ipt = document.getElementById('stdout').innerHTML;
-            var path = document.getElementsByClassName('path')[document.getElementsByClassName('path').length-1].innerHTML;
+            var path = document.getElementsByClassName('path')[document.getElementsByClassName(
+                'path').length - 1].innerHTML;
             var cmd = ipt.split(' ')[0].toLowerCase();
             var args = ipt.split(' ')[1] ? ipt.split(' ')[1].toLowerCase() : '';
             this.history.push(ipt);
@@ -144,42 +155,46 @@
                     }
                 }
             }
-            if(output.innerHTML !== '') document.body.appendChild(output);
+            if (output.innerHTML !== '') document.body.appendChild(output);
             var inputTemplate =
-            `<div>
+                `<div>
                 <span><span class="name">bing</span>@<a href="https://zou.buzz" target="_blank" class="link">zou.buzz</a>:<span class="path">${path}</span> $ </span>
                 <span class="command" id="stdout"></span><span id="cursor">&nbsp;</span>
             </div>`;
             document.body.innerHTML += inputTemplate;
+            this.scroll();
 
         },
-        resetID: function(id) {
-            var element = document.getElementById(id);
-
-            if (element) {
-                element.removeAttribute('id');
-            }
+        scroll: function() {
+            var n = 0;
+            document.body.scrollHeight
+            var scroller = setInterval(function() {
+                window.scrollTo(0, n);
+                n += 5;
+                if (n >= document.body.scrollHeight) clearInterval(scroller)
+            })
         },
         commands: {
-            open: function(args){
+            open: function(args) {
                 var args = args || '';
-                if(args == 'readme') {
+                if (args == 'readme') {
                     return `Hey there, my name is bing and welcome to my website! I'm a front-end
 developer and I'm always seeking to build awesome stuff.
 
 If you ever need help, type "help".
 
-You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</a> or check me out on Github.com<a href="https://github.com/shadeofgod" target="_blank" class="href">/shadeofgod</a>.`
-                } else if (args == 'resume'){
-                    return `123`
+You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</a> or check me out on <a href="https://github.com/shadeofgod" target="_blank" class="href">Github.com/shadeofgod</a>.`
+                } else if (args == 'resume') {
+                    return `Please mail me and I will send my it to you.`
                 } else {
                     return `-bash: open ${args}: No such file or directory`
                 }
             },
             ls: function() {
-                var path = document.getElementsByClassName('path')[document.getElementsByClassName('path').length-1].innerHTML;
+                var path = document.getElementsByClassName('path')[document.getElementsByClassName(
+                    'path').length - 1].innerHTML;
                 console.log(path)
-                if( path === '~') {
+                if (path === '~') {
                     return `<span class="cv">README</span><span class="cv">resume</span><span class="cv">projects</span>`;
                 } else if (path === 'projects') {
                     return `<a href="https://zou.buzz" class="href">Blog</a> - My personal blog
@@ -212,14 +227,14 @@ contents of that directory. The contents of a file can be viewed using "open".
 Commands are(case insensitive):
 open  cd  ls  profile  clear  help  tree`;
             },
-            profile: function(){
+            profile: function() {
                 return `TODO`
             },
-            clear: function(){
+            clear: function() {
                 document.body.innerHTML = '';
                 return '';
             },
-            tree: function(){
+            tree: function() {
                 return `~
 |——README
 |——resume
