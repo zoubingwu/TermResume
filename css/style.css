@@ -6,16 +6,34 @@
 html, body {
     width: 100%;
     height: 100%;
-    background-color: #000;
-    color: #bfbfbf;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
     font-family: monospace, Monaco;
-    font-size: 18px;
+    font-size: 16px;
     vertical-align: middle;
+}
+div.out {
+    white-space: pre;
+}
+span {
+    text-align: left;
+}
+span.path {
+    color: #ffff55;
 }
 span.command {
     white-space: pre;
+    background-color: #454545;
 }
-a.link {
+span.name {
+    color: #ff5555;
+}
+span.cv {
+    color: #ff55ff;
+    padding-right: 20px;
+    text-align: left;
+}
+a.link, span.link {
     color: #5555ff;
     text-decoration: none;
 }
