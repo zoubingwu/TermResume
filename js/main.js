@@ -77,7 +77,9 @@
                 this.intro('help', function() {
                     this.intro('cd projects', function() {
                         this.intro('ls', function(){
-                            this.intro('cd ~')
+                            this.intro('cd ~', function(){
+                                this.intro('open resume')
+                            }.bind(this))
                         }.bind(this));
                     }.bind(this))
                 }.bind(this))
@@ -94,7 +96,7 @@
                     that.specialKeysHandler(13);
                     if (callback) callback();
                 };
-            }, 200)
+            }, 100)
         },
         input: function(key) {
             var stdout = document.getElementById('stdout');
@@ -166,26 +168,76 @@
 
         },
         scroll: function() {
-            var n = 0;
-            document.body.scrollHeight
-            var scroller = setInterval(function() {
-                window.scrollTo(0, n);
-                n += 5;
-                if (n >= document.body.scrollHeight) clearInterval(scroller)
+            var scroller = setInterval(function(){
+                window.scrollBy(0, 10)
+                if (document.body.scrollTop+document.documentElement.clientHeight>=document.documentElement.scrollHeight) {
+                    clearInterval(scroller);
+                }
             })
         },
         commands: {
             open: function(args) {
                 var args = args || '';
                 if (args == 'readme') {
-                    return `Hey there, my name is bing and welcome to my website! I'm a front-end
+                    return `Hey there, welcome to my website! I'm a front-end
 developer and I'm always seeking to build awesome stuff.
 
 If you ever need help, type "help".
 
 You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</a> or check me out on <a href="https://github.com/shadeofgod" target="_blank" class="href">Github.com/shadeofgod</a>.`
                 } else if (args == 'resume') {
-                    return `Please mail me and I will send my it to you.`
+                    return `
+{
+    "Name": "zoubingwu",
+    "Environment": "macOS/Terminal/Atom/Vscode/Git",
+    "Blog": "zou.buzz",
+    "Online Resume": "zou.buzz/resume",
+    "Skills": {
+        "HTML":         "[########___]",
+        "CSS":          "[########___]",
+        "JavaScript":   "[#########__]",
+        "jQuery":       "[########___]",
+        "Bootstrap":    "[#######____]",
+        "VueJs":        "[####_______]",
+        "ReactJs":      "[###________]",
+        "NodeJs":       "[###________]",
+        "Prob-solving": "[##########_]",
+        "Motivation":   "[###########]",
+        "Reliability":  "[###########]",
+        "Hard-working": "[###########]"
+    },
+    "CurrentlyLearning":[
+        "ECMAScript 6",
+        "VueJs",
+        "React",
+        "webpack"
+    ],
+    "BookList": {
+        "reading": [
+            "高性能JavaScript",
+        ],
+        "Planning": [
+            "JavaScript设计模式与开发实践",
+            "算法导论",
+            "Http权威指南",
+            "基于MVC的JavaScript Web福应用开发"
+        ],
+        "finished": [
+            "JavaScript高级程序设计",
+            "高性能网站建设指南"
+        ]
+    },
+    "Languages": [
+        "Chinese",
+        "English",
+        "Français"
+    ],
+    "Hobbies": [
+        "Coding",
+        "Jogging",
+        "Reading"
+    ]
+}`;
                 } else {
                     return `-bash: open ${args}: No such file or directory`
                 }
@@ -193,11 +245,11 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
             ls: function() {
                 var path = document.getElementsByClassName('path')[document.getElementsByClassName(
                     'path').length - 1].innerHTML;
-                console.log(path)
+
                 if (path === '~') {
                     return `<span class="cv">README</span><span class="cv">resume</span><span class="cv">projects</span>`;
                 } else if (path === 'projects') {
-                    return `<a href="https://zou.buzz" class="href">Blog</a> - My personal blog
+                    return `<a href="https://zou.buzz" class="href">Blog</a> - My personal blog.
 <a href="https://github.com/shadeofgod" class="href">Github</a> - I have various projects hosted on my Github including this website.
 <a href="https://github.com/shadeofgod/gobang" class="href">Gobang</a> - A Gobang game with artificial intelligence written by JavaScript.
 <a href="https://github.com/shadeofgod/waterfall.js" class="href">Waterfalljs</a> - A waterfall layout library.
@@ -205,7 +257,7 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
 <a href="https://github.com/shadeofgod/2048" class="href">2048</a> - 2048 game with fully mobile support.
 <a href="https://github.com/shadeofgod/boomjs" class="href">Boomjs</a> - Funny jQuery pluggin makes your dom explode.
 <a href="https://github.com/shadeofgod/anime.js" class="href">Animejs</a> - a small frame animation library for JavaScript.
-<a href="https://github.com/shadeofgod/demos" class="href">Demos</a> - some intersting effects and demos.
+<a href="https://github.com/shadeofgod/demos" class="href">Demos</a> - some interesting effects and demos.
 <a href="https://github.com/shadeofgod/ife/blob/master/2017/baidu_nuomi_fe/phantomjs2/task.js" class="href">phantomjs</a> - light baidu search spider by phantomjs.`;
                 }
             },
@@ -225,7 +277,7 @@ text color, use "cd" to change into a directory or use "ls" to list the
 contents of that directory. The contents of a file can be viewed using "open".
 
 Commands are(case insensitive):
-open  cd  ls  profile  clear  help  tree`;
+<span class="cv">open  cd  ls  profile  clear  help  tree</span>`;
             },
             profile: function() {
                 return `TODO`
