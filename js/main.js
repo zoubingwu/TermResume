@@ -272,9 +272,9 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
             help: function() {
                 return `You can navigate either by clicking on anything that underlines
 when you put your mouse over it, or by typing commands in the terminal.
-Type the name of a link to view it. Use "profile" to change the theme and
-text color, use "cd" to change into a directory or use "ls" to list the
-contents of that directory. The contents of a file can be viewed using "open".
+Use "profile" to change the theme and text color, use "cd" to change into a
+directory or use "ls" to list the contents of that directory. The contents
+of a file can be viewed using "open".
 
 Commands are(case insensitive):
 <span class="cv">open  cd  ls  profile  clear  help  tree</span>`;
