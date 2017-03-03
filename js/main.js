@@ -7,12 +7,6 @@
         }
     }
 
-    if (!String.prototype.startsWith) {
-        String.prototype.startsWith = function(s) {
-            return this.indexOf(s) == 0;
-        }
-    }
-
     if (!Function.prototype.bind) {
         Function.prototype.bind = function(oThis) {
             if (typeof this !== "function") {
@@ -38,21 +32,21 @@
         };
     }
 
-    var ttys = {
-        showTime: function() {
-            var time = document.getElementById('time');
-            var t = new Date();
+    let ttys = {
+        showTime() {
+            let time = document.getElementById('time');
+            let t = new Date();
             time.innerHTML = `Last Login: ${t} on ttys000`;
         },
-        cursorBlinker: function() {
-            var cursor = document.getElementById('cursor');
+        cursorBlinker() {
+            let cursor = document.getElementById('cursor');
             cursor.className = cursor.className ? '' : 'blink';
             setTimeout(this.cursorBlinker.bind(this), 500);
         },
-        begin: function() {
+        begin() {
             window.onkeydown = function(e) {
-                var key = (e.which) ? e.which : e.keyCode;
-                // console.log(key);
+                let key = (e.which) ? e.which : e.keyCode;
+
                 if (key === 13 || key === 46 || key === 38 || key === 37 || key ===
                     39 ||
                     key === 40 || e.ctrlKey) {
@@ -73,41 +67,50 @@
             this.showTime();
             this.cursorBlinker();
             this.begin();
-            this.intro('open README', function() {
-                this.intro('help', function() {
-                    this.intro('cd projects', function() {
-                        this.intro('ls', function(){
-                            this.intro('cd ~', function(){
-                                this.intro('open resume')
-                            }.bind(this))
-                        }.bind(this));
-                    }.bind(this))
-                }.bind(this))
-            }.bind(this))
+            this.intro('open README')
+                .then(() => {
+                    return this.intro('help');
+                })
+                .then(() => {
+                    return this.intro('cd projects');
+                })
+                .then(() => {
+                    return this.intro('ls');
+                })
+                .then(() => {
+                    return this.intro('cd ~');
+                })
+                .then(() => {
+                    return this.intro('open resume');
+                })
+                .then(() => {
+                    return this.intro('tree');
+                })
         },
-        intro: function(command, callback) {
-            var that = this;
-            var i = 0;
-            var autoType = setInterval(function() {
-                document.getElementById('stdout').innerHTML += command[i];
-                i++;
-                if (i == command.length) {
-                    clearInterval(autoType);
-                    that.specialKeysHandler(13);
-                    if (callback) callback();
-                };
-            }, 250)
+        intro(command) {
+            return new Promise((resolve, reject) => {
+                let i = 0;
+                let autoType = setInterval(() => {
+                    document.getElementById('stdout').innerHTML += command[i];
+                    i++;
+                    if (i == command.length) {
+                        clearInterval(autoType);
+                        this.specialKeysHandler(13);
+                        resolve();
+                    };
+                }, 250)
+            })
         },
-        input: function(key) {
-            var stdout = document.getElementById('stdout');
+        input(key) {
+            let stdout = document.getElementById('stdout');
             if (!stdout || key < 0x20 || key > 0x7E || key === 13 || key === 9) {
                 return;
             }
             stdout.innerHTML += String.fromCharCode(key);
         },
-        specialKeysHandler: function(key, e) {
+        specialKeysHandler(key, e) {
 
-            var stdout = document.getElementById('stdout');
+            let stdout = document.getElementById('stdout');
             if (!stdout) return;
 
             if (key === 8 || key === 46) { // Backspace/delete.
@@ -132,16 +135,16 @@
             }
         },
 
-        returnHandler: function() {
-            var ipt = document.getElementById('stdout').innerHTML;
-            var path = document.getElementsByClassName('path')[document.getElementsByClassName(
+        returnHandler() {
+            let ipt = document.getElementById('stdout').innerHTML;
+            let path = document.getElementsByClassName('path')[document.getElementsByClassName(
                 'path').length - 1].innerHTML;
-            var cmd = ipt.split(' ')[0].toLowerCase();
-            var args = ipt.split(' ')[1] ? ipt.split(' ')[1].toLowerCase() : '';
+            let cmd = ipt.split(' ')[0].toLowerCase();
+            let args = ipt.split(' ')[1] ? ipt.split(' ')[1].toLowerCase() : '';
             this.history.push(ipt);
             document.getElementById('cursor').remove();
             document.getElementById('stdout').removeAttribute('id');
-            var output = document.createElement('div');
+            let output = document.createElement('div');
             output.className = 'out'
             if (cmd && cmd.length) {
                 if (cmd in this.commands) {
@@ -158,7 +161,7 @@
                 }
             }
             if (output.innerHTML !== '') document.body.appendChild(output);
-            var inputTemplate =
+            let inputTemplate =
                 `<div>
                 <span><span class="name">bing</span>@<a href="https://zou.buzz" target="_blank" class="link">zou.buzz</a>:<span class="path">${path}</span> $ </span>
                 <span class="command" id="stdout"></span><span id="cursor">&nbsp;</span>
@@ -167,7 +170,7 @@
             this.scroll();
 
         },
-        scroll: function() {
+        scroll() {
             var scroller = setInterval(function(){
                 window.scrollBy(0, 10)
                 if (document.body.scrollTop+document.documentElement.clientHeight>=document.documentElement.scrollHeight) {
@@ -176,7 +179,7 @@
             })
         },
         commands: {
-            open: function(args) {
+            open(args) {
                 var args = args || '';
                 if (args == 'readme') {
                     return `Hey there, welcome to my website! I'm a front-end
@@ -242,7 +245,7 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
                     return `-bash: open ${args}: No such file or directory`
                 }
             },
-            ls: function() {
+            ls() {
                 var path = document.getElementsByClassName('path')[document.getElementsByClassName(
                     'path').length - 1].innerHTML;
 
@@ -261,7 +264,7 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
 <a href="https://github.com/shadeofgod/ife/blob/master/2017/baidu_nuomi_fe/phantomjs2/task.js" class="href">phantomjs</a> - light baidu search spider by phantomjs.`;
                 }
             },
-            cd: function(args) {
+            cd(args) {
                 var args = args || '';
                 if (args === 'projects' || args === '~') {
                     return '';
@@ -269,7 +272,7 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
                     return `-bash: open ${args}: No such directory`
                 }
             },
-            help: function() {
+            help() {
                 return `You can navigate either by clicking on anything that underlines
 when you put your mouse over it, or by typing commands in the terminal.
 Use "profile" to change the theme and text color, use "cd" to change into a
@@ -279,14 +282,14 @@ of a file can be viewed using "open".
 Commands are(case insensitive):
 <span class="cv">open  cd  ls  profile  clear  help  tree</span>`;
             },
-            profile: function() {
+            profile() {
                 return `TODO`
             },
-            clear: function() {
+            clear() {
                 document.body.innerHTML = '';
                 return '';
             },
-            tree: function() {
+            tree() {
                 return `~
 |——README
 |——resume
