@@ -1,50 +1,19 @@
 (function() {
-    if (typeof Object.create !== 'function') {
-        Object.create = function(o) {
-            function F() {};
-            F.prototype = o;
-            return new F();
-        }
-    }
-
-    if (!Function.prototype.bind) {
-        Function.prototype.bind = function(oThis) {
-            if (typeof this !== "function") {
-                throw new TypeError(
-                    "Function.prototype.bind - what is trying to be bound is not callable"
-                );
-            }
-
-            var aArgs = Array.prototype.slice.call(arguments, 1),
-                fToBind = this,
-                fNOP = function() {},
-                fBound = function() {
-                    return fToBind.apply(
-                        this instanceof fNOP && oThis ? this : oThis || window,
-                        aArgs.concat(Array.prototype.slice.call(arguments))
-                    );
-                };
-
-            fNOP.prototype = this.prototype;
-            fBound.prototype = new fNOP();
-
-            return fBound;
-        };
-    }
-
-    let ttys = {
+    class Terminal  {
         showTime() {
             let time = document.getElementById('time');
             let t = new Date();
             time.innerHTML = `Last Login: ${t} on ttys000`;
-        },
+        }
         cursorBlinker() {
             let cursor = document.getElementById('cursor');
             cursor.className = cursor.className ? '' : 'blink';
-            setTimeout(this.cursorBlinker.bind(this), 500);
-        },
+            setTimeout(() => {
+                this.cursorBlinker()
+            }, 500);
+        }
         begin() {
-            window.onkeydown = function(e) {
+            window.onkeydown = (e) => {
                 let key = (e.which) ? e.which : e.keyCode;
 
                 if (key === 13 || key === 46 || key === 38 || key === 37 || key ===
@@ -54,14 +23,14 @@
                 }
 
                 this.specialKeysHandler(key, e);
-            }.bind(this);
+            };
 
-            window.onkeypress = function(e) {
+            window.onkeypress = (e) => {
                 this.input((e.which) ? e.which : e.keyCode)
-            }.bind(this);
+            };
 
-        },
-        init: function() {
+        }
+        init() {
             this.history = [];
             this.historyIndex = -1;
             this.showTime();
@@ -86,28 +55,29 @@
                 .then(() => {
                     return this.intro('tree');
                 })
-        },
+        }
         intro(command) {
             return new Promise((resolve, reject) => {
                 let i = 0;
                 let autoType = setInterval(() => {
-                    document.getElementById('stdout').innerHTML += command[i];
-                    i++;
                     if (i == command.length) {
                         clearInterval(autoType);
                         this.specialKeysHandler(13);
                         resolve();
+                        return;
                     };
-                }, 250)
+                    document.getElementById('stdout').innerHTML += command[i];
+                    i++;
+                }, 200)
             })
-        },
+        }
         input(key) {
             let stdout = document.getElementById('stdout');
             if (!stdout || key < 0x20 || key > 0x7E || key === 13 || key === 9) {
                 return;
             }
             stdout.innerHTML += String.fromCharCode(key);
-        },
+        }
         specialKeysHandler(key, e) {
 
             let stdout = document.getElementById('stdout');
@@ -133,7 +103,7 @@
             } else if (key === 37 || key === 39) { // left and right arrow
                 // TODO
             }
-        },
+        }
 
         returnHandler() {
             let ipt = document.getElementById('stdout').innerHTML;
@@ -169,28 +139,28 @@
             document.body.innerHTML += inputTemplate;
             this.scroll();
 
-        },
+        }
         scroll() {
-            var scroller = setInterval(function(){
+            let scroller = setInterval(() => {
                 window.scrollBy(0, 10)
                 if (document.body.scrollTop+document.documentElement.clientHeight>=document.documentElement.scrollHeight) {
                     clearInterval(scroller);
                 }
             })
-        },
-        commands: {
-            open(args) {
-                var args = args || '';
-                if (args == 'readme') {
-                    return `Hey there, welcome to my website! I'm a front-end
+        }
+        constructor (){
+
+            this.commands = {
+                open(args) {
+                    if (args == 'readme') {
+                        return `Hey there, welcome to my website! I'm a front-end
 developer and I'm always seeking to build awesome stuff.
 
 If you ever need help, type "help".
 
 You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</a> or check me out on <a href="https://github.com/shadeofgod" target="_blank" class="href">Github.com/shadeofgod</a>.`
-                } else if (args == 'resume') {
-                    return `
-{
+                    } else if (args == 'resume') {
+                        return `{
     "Name": "zoubingwu",
     "Environment": "macOS/Terminal/Atom/Vscode/Git",
     "Blog": "zou.buzz",
@@ -241,18 +211,18 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
         "Reading"
     ]
 }`;
-                } else {
-                    return `-bash: open ${args}: No such file or directory`
-                }
-            },
-            ls() {
-                var path = document.getElementsByClassName('path')[document.getElementsByClassName(
-                    'path').length - 1].innerHTML;
+                    } else {
+                        return `-bash: open ${args}: No such file or directory`
+                    }
+                },
+                ls() {
+                    let path = document.getElementsByClassName('path')[document.getElementsByClassName(
+                        'path').length - 1].innerHTML;
 
-                if (path === '~') {
-                    return `<span class="cv">README</span><span class="cv">resume</span><span class="cv">projects</span>`;
-                } else if (path === 'projects') {
-                    return `<a href="https://zou.buzz" class="href">Blog</a> - My personal blog.
+                        if (path === '~') {
+                            return `<span class="cv">README</span><span class="cv">resume</span><span class="cv">projects</span>`;
+                        } else if (path === 'projects') {
+                            return `<a href="https://zou.buzz" class="href">Blog</a> - My personal blog.
 <a href="https://github.com/shadeofgod" class="href">Github</a> - I have various projects hosted on my Github including this website.
 <a href="https://github.com/shadeofgod/gobang" class="href">Gobang</a> - A Gobang game with artificial intelligence written by JavaScript.
 <a href="https://github.com/shadeofgod/waterfall.js" class="href">Waterfalljs</a> - A waterfall layout library.
@@ -262,18 +232,17 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
 <a href="https://github.com/shadeofgod/anime.js" class="href">Animejs</a> - a small frame animation library for JavaScript.
 <a href="https://github.com/shadeofgod/demos" class="href">Demos</a> - some interesting effects and demos.
 <a href="https://github.com/shadeofgod/ife/blob/master/2017/baidu_nuomi_fe/phantomjs2/task.js" class="href">phantomjs</a> - light baidu search spider by phantomjs.`;
-                }
-            },
-            cd(args) {
-                var args = args || '';
-                if (args === 'projects' || args === '~') {
-                    return '';
-                } else {
-                    return `-bash: open ${args}: No such directory`
-                }
-            },
-            help() {
-                return `You can navigate either by clicking on anything that underlines
+                        }
+                    },
+                    cd(args) {
+                        if (args === 'projects' || args === '~') {
+                            return '';
+                        } else {
+                            return `-bash: open ${args}: No such directory`
+                        }
+                    },
+                    help() {
+                        return `You can navigate either by clicking on anything that underlines
 when you put your mouse over it, or by typing commands in the terminal.
 Use "profile" to change the theme and text color, use "cd" to change into a
 directory or use "ls" to list the contents of that directory. The contents
@@ -281,16 +250,16 @@ of a file can be viewed using "open".
 
 Commands are(case insensitive):
 <span class="cv">open  cd  ls  profile  clear  help  tree</span>`;
-            },
-            profile() {
-                return `TODO`
-            },
-            clear() {
-                document.body.innerHTML = '';
-                return '';
-            },
-            tree() {
-                return `~
+                    },
+                    profile() {
+                        return `TODO`
+                    },
+                    clear() {
+                        document.body.innerHTML = '';
+                        return '';
+                    },
+                    tree() {
+                        return `~
 |——README
 |——resume
 |——<a href="https://github.com/shadeofgod" class="link">projects</a>
@@ -304,12 +273,14 @@ Commands are(case insensitive):
 |  |——<a href="https://github.com/shadeofgod/anime.js" class="href">Animejs</a>
 |  |——<a href="https://github.com/shadeofgod/demos" class="href">Demos</a>
 |  |——<a href="https://github.com/shadeofgod/ife/blob/master/2017/baidu_nuomi_fe/phantomjs2/task.js" class="href">phantomjs</a>`
-            }
+                    }
+                }
         }
 
     }
 
 
-    var term = Object.create(ttys);
+
+    let term = new Terminal();
     term.init();
 })();
