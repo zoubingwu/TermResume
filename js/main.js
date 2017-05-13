@@ -171,33 +171,31 @@ You can contact me via <a href="mailto:zoubingwu@gmail.com" class="href">gmail</
         "JavaScript":   "[#########__]",
         "jQuery":       "[########___]",
         "Bootstrap":    "[#######____]",
-        "VueJs":        "[####_______]",
-        "ReactJs":      "[###________]",
-        "NodeJs":       "[###________]",
+        "VueJs":        "[########___]",
+        "ReactJs":      "[####_______]",
+        "NodeJs":       "[#####______]",
         "Prob-solving": "[##########_]",
         "Motivation":   "[###########]",
         "Reliability":  "[###########]",
         "Hard-working": "[###########]"
     },
     "CurrentlyLearning":[
-        "ECMAScript 6",
-        "VueJs",
-        "React",
-        "webpack"
+        "Node.js",
+        "计算机基础原理"
     ],
     "BookList": {
         "reading": [
-            "高性能JavaScript",
+            "Http权威指南",
         ],
         "Planning": [
             "JavaScript设计模式与开发实践",
             "算法导论",
-            "Http权威指南",
             "基于MVC的JavaScript Web富应用开发"
         ],
         "finished": [
             "JavaScript高级程序设计",
             "高性能网站建设指南"
+            "高性能JavaScript",
         ]
     },
     "Languages": [
