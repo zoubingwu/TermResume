@@ -23,11 +23,13 @@ npm run deploy
 
 ## Introduction
 
+```
 |-- build  --> build file
 |-- config --> webpack configs
 |-- dist   --> for local server build
 |-- docs   --> for github pages build
 |-- src    --> source code
+```
 
 With just ES6/sass/webpack, none of any other framework or lib is needed.
 
