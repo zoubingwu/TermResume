@@ -1,0 +1,34 @@
+// default theme
+$default-background-color:#1a1a1a;
+$default-cursor-color: #a8a7a8;
+$default-link-color: #55ff55;
+$default-text-color: #DFE2E2;
+$default-text-dir-color: #ff55ff;
+$default-href-color: #285fd9;
+$default-name-color: #5accb8;
+$default-command-color: #dbe427;
+
+@mixin keyframes($animationName) { 
+  @keyframes #{$animationName} { 
+    @content; 
+  }
+}
+
+@mixin blinkCursor {
+  background-color: $default-cursor-color;
+  animation: blink 1s ease infinite;
+  display: inline-block;
+  width: 3px;
+  height: 16px;
+  @include keyframes(blink) {
+    from {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}

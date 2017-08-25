@@ -1,0 +1,48 @@
+@import "normalize";
+@import "default";
+
+html, body {
+  background-color: $default-background-color;
+}
+#app {
+  background-color: $default-background-color;
+  color: $default-text-color;
+  width: 100vw;
+  // height: 100vh;
+  line-height: 1.4;
+
+  time {
+    display: block;
+  }
+  a {
+    color: $default-text-color;
+    &.link {
+      color: $default-link-color;
+    }
+    &.href {
+      color: $default-href-color;
+    }
+  }
+  div.stdout {
+    white-space: pre;
+  }
+  span.name {
+    color: $default-name-color;
+  }
+  span.command {
+    color: $default-command-color;
+
+    &.active:after {
+      @include blinkCursor;
+      content: '';
+      position: relative;
+      top: 2px;
+    }
+  }
+  span.stdout-text {
+    margin-right: 10px;
+    &.dir {
+      color: $default-text-dir-color;
+    }
+  }
+}

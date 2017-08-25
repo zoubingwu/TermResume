@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Resume</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body>
-    <div>
-        <span id="time"></span>
-    </div>
-    <div>
-        <span><span class="name">bing</span>@<a href="https://zou.buzz" target="_blank" class="link">zou.buzz</a>:<span class="path">~</span> $ </span>
-        <span class="command" id="stdout"></span><span id="cursor">&nbsp;</span>
-    </div>
+  <div id="app"></div>
 </body>
-<script src="js/main.js"></script>
 </html>

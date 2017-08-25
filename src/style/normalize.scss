@@ -1,0 +1,19 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: monospace, Monaco, Helvetica, san-serif;
+  font-size: 16px;
+}
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
