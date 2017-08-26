@@ -51,5 +51,9 @@ export default {
   },
   help() {
     return help
-  }
+  },
+  clear() {
+    this._terminal.$app.innerHTML = ''
+    return
+  },
 }
